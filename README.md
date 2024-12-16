@@ -5,6 +5,7 @@ A simple library management system developed for ACCA5036 coursework assignment.
 - Add new books with title and author validation.
 - Search for books by title or author.
 - Borrow and return books with status updates.
+- Displaying all books
 
 ## Getting Started
 1. Clone the repository: `git clone <repository URL>`
