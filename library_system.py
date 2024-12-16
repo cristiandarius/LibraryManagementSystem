@@ -1,86 +1,74 @@
-# Simple Library Management System
-
 def add_book(library):
-    """Add a new book to the library with validation."""
-    while True:  # Loop to ensure valid input
-        title = input("Enter book title: ").strip()
-        if not title:
-            print("Invalid input. Title cannot be empty. Please try again.")
-            continue  # Prompt the user again
-
-        author = input("Enter book author: ").strip()
-        if not author:
-            print("Invalid input. Author cannot be empty. Please try again.")
-            continue  # Prompt the user again
-
-        # If both inputs are valid
+    print("\n--- Add a New Book ---")
+    title = input("Enter book title: ").strip()
+    author = input("Enter book author: ").strip()
+    if title and author:
         book = {"title": title, "author": author, "available": True}
         library.append(book)
         print("Book added successfully.")
-        break  # Exit the loop after successful addition
-
+    else:
+        print("Invalid input. Title and Author cannot be empty.")
 
 def search_book(library):
-    """Search for a book by title or author."""
+    print("\n--- Search for a Book ---")
     keyword = input("Enter search keyword (title or author): ").strip()
-    results = [book for book in library if
-               keyword.lower() in book["title"].lower() or keyword.lower() in book["author"].lower()]
-
-    if results:
-        print("\nSearch Results:")
-        for book in results:
-            status = "Available" if book["available"] else "Borrowed"
-            print(f"Title: {book['title']}, Author: {book['author']}, Status: {status}")
+    matches = [book for book in library if keyword.lower() in book["title"].lower() or keyword.lower() in book["author"].lower()]
+    if matches:
+        print("Matching books:")
+        for book in matches:
+            print(f"Title: {book['title']}, Author: {book['author']}, Available: {'Yes' if book['available'] else 'No'}")
     else:
         print("No matching books found.")
-    print()
-
 
 def borrow_book(library):
-    """Borrow a book if it is available."""
+    print("\n--- Borrow a Book ---")
     title = input("Enter the title of the book to borrow: ").strip()
     for book in library:
-        if book["title"].lower() == title.lower():
-            if book["available"]:
-                book["available"] = False
-                print(f"You have successfully borrowed '{book['title']}'.")
-                return
-            else:
-                print(f"Sorry, the book '{book['title']}' is currently borrowed.")
-                return
-    print(f"Book '{title}' not found in the library.")
-
+        if book["title"].lower() == title.lower() and book["available"]:
+            book["available"] = False
+            print("Book borrowed successfully.")
+            return
+    print("Book not available or already borrowed.")
 
 def return_book(library):
-    """Return a borrowed book."""
+    print("\n--- Return a Book ---")
     title = input("Enter the title of the book to return: ").strip()
     for book in library:
-        if book["title"].lower() == title.lower():
-            if not book["available"]:
-                book["available"] = True
-                print(f"Thank you for returning '{book['title']}'.")
-                return
-            else:
-                print(f"The book '{book['title']}' was not borrowed.")
-                return
-    print(f"Book '{title}' not found in the library.")
+        if book["title"].lower() == title.lower() and not book["available"]:
+            book["available"] = True
+            print("Book returned successfully.")
+            return
+    print("Book not found or not borrowed.")
 
-
-def display_menu():
-    """Display the main menu."""
-    print("\nLibrary Management System")
-    print("1. Add Book")
-    print("2. Search Book")
-    print("3. Borrow Book")
-    print("4. Return Book")
-    print("5. Exit")
-
+def display_books(library):
+    print("\n--- Display All Books ---")
+    if library:
+        for index, book in enumerate(library, start=1):
+            print(f"{index}. Title: {book['title']}, Author: {book['author']}, Available: {'Yes' if book['available'] else 'No'}")
+    else:
+        print("The library is currently empty.")
 
 def main_menu():
-    """Main program loop."""
-    library = []  # Initialize an empty library list
+    # Predefined list of books
+    library = [
+        {"title": "Python Programming", "author": "John Doe", "available": True},
+        {"title": "Data Science Basics", "author": "Jane Smith", "available": True},
+        {"title": "Artificial Intelligence", "author": "Alan Turing", "available": True},
+        {"title": "Clean Code", "author": "Robert C. Martin", "available": True},
+    ]
+    
+    print("Welcome to the Library Management System!")
+    print("Manage your library with ease.")
+    
     while True:
-        display_menu()
+        print("\n--- Main Menu ---")
+        print("1. Add Book")
+        print("2. Search Book")
+        print("3. Borrow Book")
+        print("4. Return Book")
+        print("5. Display All Books")
+        print("6. Exit")
+        
         try:
             choice = int(input("Enter your choice: "))
             if choice == 1:
@@ -92,14 +80,14 @@ def main_menu():
             elif choice == 4:
                 return_book(library)
             elif choice == 5:
-                print("Exiting the program. Goodbye!")
+                display_books(library)
+            elif choice == 6:
+                print("Exiting program. Goodbye!")
                 break
             else:
-                print("Invalid choice. Please enter a number between 1 and 5.")
+                print("Invalid choice. Please select a valid option.")
         except ValueError:
-            print("Invalid input. Please enter a valid number.")
+            print("Invalid input. Please enter a number between 1 and 6.")
 
-
-# Run the program
 if __name__ == "__main__":
     main_menu()
